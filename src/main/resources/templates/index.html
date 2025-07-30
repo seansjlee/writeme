@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WRITEME.md</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <h1>WRITEME.md</h1>
+    <h2>Submit Your Project Folder</h2>
+    <form th:action="@{/generate-docs}" method="post" enctype="multipart/form-data">
+        <input type="file" name="projectFolder" webkitdirectory directory />
+        <button type="submit">Generate README</button>
+    </form>
+
+    <div th:if="${readmeContent}" class="readme-output">
+        <h2>Generated README.md</h2>
+        <pre th:text="${readmeContent}"></pre>
+    </div>
+    <div th:if="${errorMessage}" class="error-message-container">
+        <p class="error-text" th:text="${errorMessage}"></p>
+    </div>
+</body>
+</html>
