@@ -9,7 +9,18 @@
     <h1>WRITEME.md</h1>
     <h2>Submit Your Project Folder</h2>
     <form th:action="@{/generate-docs}" method="post" enctype="multipart/form-data">
-        <input type="file" name="projectFolder" webkitdirectory directory />
+        <div class="input-container">
+            <p>Project Name</p>
+            <input type="text" name="projectName" />
+        </div>
+        <div class="input-container">
+            <p>Project Description</p>
+            <input type="text" name="projectDescription" />
+        </div>
+        <div class="input-container">
+            <p>Project Folder</p>
+            <input type="file" name="projectFolder" webkitdirectory directory />
+        </div>
         <button type="submit">Generate README</button>
     </form>
 
