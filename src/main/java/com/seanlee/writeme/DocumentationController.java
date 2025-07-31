@@ -21,7 +21,7 @@ public class DocumentationController {
         return "index";
     }
 
-    @PostMapping("/generate-docs")
+    @PostMapping("/generate-readme")
     public String generateDocs(
             @RequestParam("projectName") String projectName,
             @RequestParam("projectDescription") String projectDescription,
