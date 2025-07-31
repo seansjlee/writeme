@@ -21,15 +21,49 @@
             <p>Project Folder</p>
             <input type="file" name="projectFolder" webkitdirectory directory />
         </div>
-        <button type="submit">Generate README</button>
+        <button type="submit" id="generateBtn">
+            <span id="btnText">Generate README</span>
+            <span id="spinner" style="display:none;">⏳</span>
+        </button>
     </form>
 
     <div th:if="${readmeContent}" class="readme-output">
-        <h2>Generated README.md</h2>
-        <pre th:text="${readmeContent}"></pre>
+        <div class="readme-header">
+            <h2>Generated README.md</h2>
+            <button id="copyBtn" class="copy-button" onclick="copyReadme()">Copy</button>
+        </div>
+        <pre id="readmeText" th:text="${readmeContent}"></pre>
     </div>
     <div th:if="${errorMessage}" class="error-message-container">
         <p class="error-text" th:text="${errorMessage}"></p>
     </div>
+
+    <script>
+        const generateBtn = document.getElementById("generateBtn");
+        const btnText = document.getElementById("btnText");
+        const spinner = document.getElementById("spinner");
+        const form = generateBtn.closest("form");
+
+        form.addEventListener("submit", () => {
+            generateBtn.disabled = true;
+            btnText.textContent = "Generating...";
+            spinner.style.display = "inline-block";
+        });
+
+        function copyReadme() {
+            const readmeText = document.getElementById('readmeText').textContent;
+            const copyBtn = document.getElementById('copyBtn');
+
+            navigator.clipboard.writeText(readmeText).then(function () {
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.backgroundColor = '#28a745';
+
+                setTimeout(function () {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.style.backgroundColor = '';
+                }, 3000)
+            })
+        }
+    </script>
 </body>
 </html>

@@ -80,6 +80,32 @@ button[type="submit"]:hover {
     margin-top: 20px; /* Adjust margin if needed */
 }
 
+.readme-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.copy-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.copy-button:hover {
+    background-color: #0056b3;
+}
+
+.copy-button:active {
+    transform: translateY(1px);
+}
+
 pre {
     background-color: #f8f9fa;
     border: 1px solid #e9ecef;
