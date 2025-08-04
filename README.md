@@ -12,6 +12,35 @@ WRITEME is a Spring Boot web application designed to assist developers by genera
 - **Maven**: Dependency management and build automation.
 - **Thymeleaf**: Used as the templating engine for rendering HTML views.
 
+## Project Structure
+```
+writeme
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── seanlee
+│   │   │           └── writeme
+│   │   │               ├── AiService.java
+│   │   │               ├── DocumentationController.java
+│   │   │               ├── DocumentationService.java
+│   │   │               └── WritemeApplication.java
+│   │   ├── resources
+│   │   │   ├── application.properties
+│   │   │   ├── static
+│   │   │   │   └── style.css
+│   │   │   └── templates
+│   │   │       └── index.html
+│   ├── test
+│   │   └── java
+│   │       └── com
+│   │           └── seanlee
+│   │               └── writeme
+│   │                   └── WritemeApplicationTests.java
+├── pom.xml
+└── README.md
+```
+
 ## Main Features
 - **File Upload**: Users can upload project files for analysis.
 - **Code Analysis**: The application inspects the codebase to extract relevant information.
