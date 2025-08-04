@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DocumentationService {
@@ -37,6 +39,7 @@ public class DocumentationService {
         ProjectInfo projectInfo = new ProjectInfo();
         projectInfo.projectName = projectName;
         projectInfo.projectDescription = projectDescription;
+        projectInfo.projectStructure = extractStructure(files);
 
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
@@ -53,6 +56,43 @@ public class DocumentationService {
         }
 
         return projectInfo;
+    }
+
+    private String extractStructure(MultipartFile[] files) {
+        String T_JUNCTION = "├── ";
+        String L_JUNCTION = "└── ";
+
+        StringBuilder projectStructure = new StringBuilder();
+        projectStructure.append("```\n");
+
+        List<String> paths = Arrays.stream(files)
+                .map(MultipartFile::getOriginalFilename)
+                .filter(Objects::nonNull)
+                .sorted()
+                .toList();
+
+        String prevDir = "";
+        for (int i = 0; i < paths.size(); i++) {
+            String path = paths.get(i);
+            String[] parts = path.split("/");
+
+            for (int j = 0; j < parts.length; j++) {
+                String currentPath = String.join("/", Arrays.copyOfRange(parts, 0, j + 1));
+                if (!prevDir.startsWith(currentPath)) {
+                    String prefix = "    ".repeat(j);
+                    boolean isLast = (j == parts.length - 1);
+                    projectStructure.append(prefix)
+                            .append(isLast ? L_JUNCTION : T_JUNCTION)
+                            .append(parts[j])
+                            .append("\n");
+                }
+            }
+            prevDir = path;
+        }
+
+        projectStructure.append("```");
+
+        return projectStructure.toString();
     }
 
     private void extractFileMetadata(FileInfo fileInfo, String content) {
@@ -103,6 +143,7 @@ public class DocumentationService {
 
         prompt.append("Project name: ").append(projectInfo.projectName).append("\n");
         prompt.append("Project description: ").append(projectInfo.projectDescription).append("\n");
+        prompt.append("Project structure (exclude unnecessary items):\n").append(projectInfo.projectStructure).append("\n");
 
         prompt.append("Key classes and methods:\n");
         for (FileInfo file : projectInfo.files) {
@@ -120,9 +161,10 @@ public class DocumentationService {
         prompt.append("\nGenerate a README.md that includes:\n");
         prompt.append("1. Project Title and Description\n");
         prompt.append("2. Technologies Used\n");
-        prompt.append("3. Main Features (based on code analysis)\n");
-        prompt.append("4. How to Run/Setup\n");
-        prompt.append("5. API Endpoints (if it's a web application)\n\n");
+        prompt.append("3. Project Structure\n");
+        prompt.append("4. Main Features (based on code analysis)\n");
+        prompt.append("5. How to Run/Setup\n");
+        prompt.append("6. API Endpoints (if it's a web application)\n\n");
         prompt.append("Make it professional but approachable. Use proper markdown formatting.");
 
         return prompt.toString();
@@ -135,6 +177,7 @@ public class DocumentationService {
     private static class ProjectInfo {
         String projectName;
         String projectDescription;
+        String projectStructure;
         List<FileInfo> files = new ArrayList<>();
     }
 
